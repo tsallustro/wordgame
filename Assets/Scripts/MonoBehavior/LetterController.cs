@@ -35,7 +35,7 @@ public class LetterController : MonoBehaviour
     private List<ManagedLetter> SelectableLetters = new();
 
     [SerializeField]
-    UnityEvent OnSubmit;
+    UnityEvent<int> OnSubmit;
 
     private static readonly int NUMTOGENERATE = 16;
 
@@ -119,13 +119,14 @@ public class LetterController : MonoBehaviour
 
     public void HandleSubmit()
     {
-        Debug.Log("Score: " + CalculateScore());
+        int score = CalculateScore();
+        Debug.Log("Score: " + score);
         SelectedLetters.Clear();
         ClearSelected();
         GenerateFreshLetters();
         submitButton.interactable = false;
 
-        OnSubmit?.Invoke();
+        OnSubmit?.Invoke(score);
     }
 
     private int CalculateScore()
