@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8c99296cb424c4a884bda75d5a9140, type: 3}
+  m_Name: DefaultLetterSet
+  m_EditorClassIdentifier: 
+  letterDatas:
+  - letter: A
+    GenerationWeight: 8.2
+    Score: 1
+  - letter: B
+    GenerationWeight: 1.5
+    Score: 1
+  - letter: C
+    GenerationWeight: 2.8
+    Score: 1
+  - letter: D
+    GenerationWeight: 4.3
+    Score: 1
+  - letter: E
+    GenerationWeight: 12.6
+    Score: 1
+  - letter: F
+    GenerationWeight: 2.2
+    Score: 1
+  - letter: G
+    GenerationWeight: 2
+    Score: 1
+  - letter: H
+    GenerationWeight: 6.1
+    Score: 1
+  - letter: I
+    GenerationWeight: 7
+    Score: 1
+  - letter: J
+    GenerationWeight: 0.15
+    Score: 1
+  - letter: K
+    GenerationWeight: 0.8
+    Score: 1
+  - letter: L
+    GenerationWeight: 4
+    Score: 1
+  - letter: M
+    GenerationWeight: 2.4
+    Score: 1
+  - letter: N
+    GenerationWeight: 6.7
+    Score: 1
+  - letter: O
+    GenerationWeight: 7.5
+    Score: 1
+  - letter: P
+    GenerationWeight: 1.9
+    Score: 1
+  - letter: Q
+    GenerationWeight: 0.1
+    Score: 1
+  - letter: R
+    GenerationWeight: 6
+    Score: 1
+  - letter: S
+    GenerationWeight: 6.3
+    Score: 1
+  - letter: T
+    GenerationWeight: 9.1
+    Score: 1
+  - letter: U
+    GenerationWeight: 2.8
+    Score: 1
+  - letter: V
+    GenerationWeight: 1
+    Score: 1
+  - letter: W
+    GenerationWeight: 2.4
+    Score: 1
+  - letter: X
+    GenerationWeight: 0.15
+    Score: 1
+  - letter: Y
+    GenerationWeight: 1
+    Score: 1
+  - letter: Z
+    GenerationWeight: 1
+    Score: 1
