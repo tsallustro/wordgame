@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LetterManagerController : MonoBehaviour
 {
@@ -21,6 +23,12 @@ public class LetterManagerController : MonoBehaviour
 
     [SerializeField]
     private Transform selectablePanel;
+
+    [SerializeField]
+    private Button submitButton;
+
+    [SerializeField]
+    private WordValidator wordValidator;
 
     private List<ManagedLetter> SelectedLetters = new();
     private List<ManagedLetter> SelectableLetters = new();
@@ -98,17 +106,20 @@ public class LetterManagerController : MonoBehaviour
             // Reparent and reorder based on new sorted list
             ReSortSelectableLetters();
         }
+
+        if (SelectedLetters.Count > 0 && wordValidator.IsValid(SelectedToString()))
+            submitButton.interactable = true;
+        else
+            submitButton.interactable = false;
     }
 
     public void OnSubmit()
     {
-        if (SelectedLetters.Count > 0)
-        {
-            Debug.Log("Score: " + CalculateScore());
-            SelectedLetters.Clear();
-            ClearSelected();
-            GenerateFreshLetters();
-        }
+        Debug.Log("Score: " + CalculateScore());
+        SelectedLetters.Clear();
+        ClearSelected();
+        GenerateFreshLetters();
+        submitButton.interactable = false;
     }
 
     private int CalculateScore()
@@ -181,6 +192,17 @@ public class LetterManagerController : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    private string SelectedToString()
+    {
+        StringBuilder stringBuilder = new();
+        for (int i = 0; i < SelectedLetters.Count; i++)
+        {
+            stringBuilder.Append(SelectedLetters[i].Tile.LetterData.Letter);
+        }
+
+        return stringBuilder.ToString();
     }
 
     private class ManagedLetter
