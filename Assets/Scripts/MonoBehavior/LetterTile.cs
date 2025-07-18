@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class LetterTile : MonoBehaviour
 {
-    [SerializeField] private TMP_Text letterText;
+    [SerializeField]
+    private TMP_Text letterText;
 
     public LetterData LetterData { get; set; }
 
@@ -17,11 +18,10 @@ public class LetterTile : MonoBehaviour
     {
         LetterData = data;
         letterText.text = data.Letter.ToString();
-        
     }
 
     private void OnClick()
     {
-        LetterManagerController.Instance.OnLetterClicked(this);
+        LetterController.Instance.OnLetterClicked(this);
     }
 }

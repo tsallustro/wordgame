@@ -1,22 +1,44 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class LetterManagerController : MonoBehaviour
+public class LetterController : MonoBehaviour
 {
-    public static LetterManagerController Instance { get; private set; }
+    public static LetterController Instance { get; private set; }
 
-    [SerializeField] private Boolean ExampleMode = false;
-    [SerializeField] private LetterSet ActiveLetterSet;
-    [SerializeField] GameObject letterTilePrefab;
-    [SerializeField] private Transform selectedPanel;
-    [SerializeField] private Transform selectablePanel;
+    [SerializeField]
+    private Boolean ExampleMode = false;
+
+    [SerializeField]
+    private LetterSet ActiveLetterSet;
+
+    [SerializeField]
+    GameObject letterTilePrefab;
+
+    [SerializeField]
+    private Transform selectedPanel;
+
+    [SerializeField]
+    private Transform selectablePanel;
+
+    [SerializeField]
+    private Button submitButton;
+
+    [SerializeField]
+    private WordValidator wordValidator;
 
     private List<ManagedLetter> SelectedLetters = new();
     private List<ManagedLetter> SelectableLetters = new();
 
+    [SerializeField]
+    UnityEvent<int> OnSubmit;
+
     private static readonly int NUMTOGENERATE = 16;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,14 +67,15 @@ public class LetterManagerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Starting Letter Manager Controller with total weight: " + ActiveLetterSet.TotalGenerationWeight);
+            Debug.Log(
+                "Starting Letter Manager Controller with total weight: "
+                    + ActiveLetterSet.TotalGenerationWeight
+            );
             for (int i = 0; i < NUMTOGENERATE; i++)
             {
                 GenerateNewLetter(i);
             }
-
         }
-
     }
 
     public void OnLetterClicked(LetterTile tile)
@@ -82,30 +105,29 @@ public class LetterManagerController : MonoBehaviour
                 // Update lists
                 SelectableLetters.Add(toDeselect);
                 SelectedLetters.RemoveAt(i);
-
             }
 
             // Reparent and reorder based on new sorted list
             ReSortSelectableLetters();
         }
 
-
+        if (SelectedLetters.Count > 0 && wordValidator.IsValid(SelectedToString()))
+            submitButton.interactable = true;
+        else
+            submitButton.interactable = false;
     }
 
-    public void OnSubmit()
+    public void HandleSubmit()
     {
-        if (SelectedLetters.Count > 0)
-        {
-            Debug.Log("Score: " + CalculateScore());
-            SelectedLetters.Clear();
-            ClearSelected();
-            GenerateFreshLetters();
-        }
+        int score = CalculateScore();
+        Debug.Log("Score: " + score);
+        SelectedLetters.Clear();
+        ClearSelected();
+        GenerateFreshLetters();
+        submitButton.interactable = false;
 
-
+        OnSubmit?.Invoke(score);
     }
-
-
 
     private int CalculateScore()
     {
@@ -125,7 +147,6 @@ public class LetterManagerController : MonoBehaviour
         {
             SelectableLetters[i].Tile.transform.SetSiblingIndex(i);
         }
-
     }
 
     private void GenerateFreshLetters()
@@ -142,6 +163,7 @@ public class LetterManagerController : MonoBehaviour
 
         ReSortSelectableLetters();
     }
+
     private void GenerateNewLetter(int idx)
     {
         LetterData data = ActiveLetterSet.GetRandomLetter();
@@ -151,7 +173,7 @@ public class LetterManagerController : MonoBehaviour
         SelectableLetters.Add(new ManagedLetter(tile, obj, idx));
     }
 
-    public void OnScramble()
+    public void HandleScramble()
     {
         if (SelectedLetters.Count == 0)
         {
@@ -179,6 +201,17 @@ public class LetterManagerController : MonoBehaviour
         }
     }
 
+    private string SelectedToString()
+    {
+        StringBuilder stringBuilder = new();
+        for (int i = 0; i < SelectedLetters.Count; i++)
+        {
+            stringBuilder.Append(SelectedLetters[i].Tile.LetterData.Letter);
+        }
+
+        return stringBuilder.ToString();
+    }
+
     private class ManagedLetter
     {
         public LetterTile Tile;
@@ -193,5 +226,4 @@ public class LetterManagerController : MonoBehaviour
             originalIndex = idx;
         }
     }
-
 }

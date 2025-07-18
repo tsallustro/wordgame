@@ -22,7 +22,7 @@ public class LetterSet : ScriptableObject
         {
             for (char c = 'A'; c <= 'Z'; c++)
             {
-                letterDatas.Add(new LetterData(c, 1f, 1));  // default weight=1, score=1
+                letterDatas.Add(new LetterData(c, 1f, 1)); // default weight=1, score=1
             }
         }
         CalculateTotalWeight();
@@ -35,7 +35,7 @@ public class LetterSet : ScriptableObject
 
     public LetterData GetRandomLetter()
     {
-        double randValue = random.NextDouble() * 100;  // since total weight is 100
+        double randValue = random.NextDouble() * 100; // since total weight is 100
         double cumulative = 0;
 
         foreach (var letter in letterDatas)
@@ -48,8 +48,9 @@ public class LetterSet : ScriptableObject
         }
 
         // Fallback in case of floating point issues (shouldn't happen if total weight is 100)
-    return letterDatas[^1];
+        return letterDatas[^1];
     }
+
     private void CalculateTotalWeight()
     {
         TotalGenWeight = 0;
@@ -59,4 +60,3 @@ public class LetterSet : ScriptableObject
         }
     }
 }
-
