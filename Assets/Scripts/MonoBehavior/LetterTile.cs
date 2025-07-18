@@ -22,6 +22,6 @@ public class LetterTile : MonoBehaviour
 
     private void OnClick()
     {
-        LetterManagerController.Instance.OnLetterClicked(this);
+        LetterController.Instance.OnLetterClicked(this);
     }
 }

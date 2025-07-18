@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class LetterManagerController : MonoBehaviour
+public class LetterController : MonoBehaviour
 {
-    public static LetterManagerController Instance { get; private set; }
+    public static LetterController Instance { get; private set; }
 
     [SerializeField]
     private Boolean ExampleMode = false;
@@ -32,6 +33,9 @@ public class LetterManagerController : MonoBehaviour
 
     private List<ManagedLetter> SelectedLetters = new();
     private List<ManagedLetter> SelectableLetters = new();
+
+    [SerializeField]
+    UnityEvent OnSubmit;
 
     private static readonly int NUMTOGENERATE = 16;
 
@@ -113,13 +117,15 @@ public class LetterManagerController : MonoBehaviour
             submitButton.interactable = false;
     }
 
-    public void OnSubmit()
+    public void HandleSubmit()
     {
         Debug.Log("Score: " + CalculateScore());
         SelectedLetters.Clear();
         ClearSelected();
         GenerateFreshLetters();
         submitButton.interactable = false;
+
+        OnSubmit?.Invoke();
     }
 
     private int CalculateScore()
@@ -166,7 +172,7 @@ public class LetterManagerController : MonoBehaviour
         SelectableLetters.Add(new ManagedLetter(tile, obj, idx));
     }
 
-    public void OnScramble()
+    public void HandleScramble()
     {
         if (SelectedLetters.Count == 0)
         {
