@@ -7,16 +7,26 @@ public class LetterManagerController : MonoBehaviour
 {
     public static LetterManagerController Instance { get; private set; }
 
-    [SerializeField] private Boolean ExampleMode = false;
-    [SerializeField] private LetterSet ActiveLetterSet;
-    [SerializeField] GameObject letterTilePrefab;
-    [SerializeField] private Transform selectedPanel;
-    [SerializeField] private Transform selectablePanel;
+    [SerializeField]
+    private Boolean ExampleMode = false;
+
+    [SerializeField]
+    private LetterSet ActiveLetterSet;
+
+    [SerializeField]
+    GameObject letterTilePrefab;
+
+    [SerializeField]
+    private Transform selectedPanel;
+
+    [SerializeField]
+    private Transform selectablePanel;
 
     private List<ManagedLetter> SelectedLetters = new();
     private List<ManagedLetter> SelectableLetters = new();
 
     private static readonly int NUMTOGENERATE = 16;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,14 +55,15 @@ public class LetterManagerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Starting Letter Manager Controller with total weight: " + ActiveLetterSet.TotalGenerationWeight);
+            Debug.Log(
+                "Starting Letter Manager Controller with total weight: "
+                    + ActiveLetterSet.TotalGenerationWeight
+            );
             for (int i = 0; i < NUMTOGENERATE; i++)
             {
                 GenerateNewLetter(i);
             }
-
         }
-
     }
 
     public void OnLetterClicked(LetterTile tile)
@@ -82,14 +93,11 @@ public class LetterManagerController : MonoBehaviour
                 // Update lists
                 SelectableLetters.Add(toDeselect);
                 SelectedLetters.RemoveAt(i);
-
             }
 
             // Reparent and reorder based on new sorted list
             ReSortSelectableLetters();
         }
-
-
     }
 
     public void OnSubmit()
@@ -101,11 +109,7 @@ public class LetterManagerController : MonoBehaviour
             ClearSelected();
             GenerateFreshLetters();
         }
-
-
     }
-
-
 
     private int CalculateScore()
     {
@@ -125,7 +129,6 @@ public class LetterManagerController : MonoBehaviour
         {
             SelectableLetters[i].Tile.transform.SetSiblingIndex(i);
         }
-
     }
 
     private void GenerateFreshLetters()
@@ -142,6 +145,7 @@ public class LetterManagerController : MonoBehaviour
 
         ReSortSelectableLetters();
     }
+
     private void GenerateNewLetter(int idx)
     {
         LetterData data = ActiveLetterSet.GetRandomLetter();
@@ -193,5 +197,4 @@ public class LetterManagerController : MonoBehaviour
             originalIndex = idx;
         }
     }
-
 }
