@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef9d3511653796448dcc807baf1b893, type: 3}
   m_Name: HiddenKnightData
   m_EditorClassIdentifier: 
-  characterName: HiddenKnight
+  characterName: Hidden Knight
   hp: 1
   def: 1
   off: 1
