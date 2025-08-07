@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectorController : MonoBehaviour
 {
@@ -8,5 +9,6 @@ public class CharacterSelectorController : MonoBehaviour
     public void HandleClick()
     {
         Debug.Log($"Starting new game with character {characterData.Name}");
+        SceneManager.LoadScene("Level");
     }
 }
