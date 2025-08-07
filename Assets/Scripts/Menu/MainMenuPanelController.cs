@@ -1,7 +1,21 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuPanelController : MonoBehaviour
 {
+    public static MainMenuPanelController Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     [SerializeField]
     private GameObject mainMenuPanel;
 
@@ -44,5 +58,12 @@ public class MainMenuPanelController : MonoBehaviour
         newGamePanel.SetActive(false);
         loadGamePanel.SetActive(false);
         optionsPanel.SetActive(true);
+    }
+
+    public void LoadLevel(CharacterData characterData)
+    {
+        Debug.Log($"Starting new game with character {characterData.Name}");
+        LevelCharacterData.Instance.characterData = characterData;
+        SceneManager.LoadScene("Level");
     }
 }
