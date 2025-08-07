@@ -5,6 +5,7 @@ public class LevelCharacterData : MonoBehaviour
     public static LevelCharacterData Instance;
 
     public CharacterData characterData;
+    public int currentHP = 1;
 
     private void Awake()
     {
@@ -18,5 +19,11 @@ public class LevelCharacterData : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void SetCharacterData(CharacterData newData)
+    {
+        this.characterData = newData;
+        currentHP = newData.HP;
     }
 }
