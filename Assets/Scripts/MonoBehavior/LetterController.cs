@@ -39,6 +39,8 @@ public class LetterController : MonoBehaviour
 
     private static readonly int NUMTOGENERATE = 16;
 
+    Boolean isEnabled = true;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -80,41 +82,43 @@ public class LetterController : MonoBehaviour
 
     public void OnLetterClicked(LetterTile tile)
     {
-        // Move tile to other panel
-        if (tile.transform.parent == selectablePanel)
-        {
-            ManagedLetter managed = SelectableLetters.Find(m => m.Tile == tile);
-            tile.transform.SetParent(selectedPanel, false);
-            SelectedLetters.Add(managed);
-            SelectableLetters.Remove(managed);
-        }
-        else if (tile.transform.parent == selectedPanel)
-        {
-            ManagedLetter managed = SelectedLetters.Find(m => m.Tile == tile);
-            int currentIndex = SelectedLetters.IndexOf(managed);
-
-            // Remove the clicked tile and everything *after* it
-            for (int i = SelectedLetters.Count - 1; i >= currentIndex; i--)
+        if (isEnabled)
+        { // Move tile to other panel
+            if (tile.transform.parent == selectablePanel)
             {
-                var toDeselect = SelectedLetters[i];
+                ManagedLetter managed = SelectableLetters.Find(m => m.Tile == tile);
+                tile.transform.SetParent(selectedPanel, false);
+                SelectedLetters.Add(managed);
+                SelectableLetters.Remove(managed);
+            }
+            else if (tile.transform.parent == selectedPanel)
+            {
+                ManagedLetter managed = SelectedLetters.Find(m => m.Tile == tile);
+                int currentIndex = SelectedLetters.IndexOf(managed);
 
-                // Move it back to selectable panel
-                toDeselect.Tile.transform.SetParent(selectablePanel, false);
-                toDeselect.Tile.transform.SetSiblingIndex(toDeselect.originalIndex);
+                // Remove the clicked tile and everything *after* it
+                for (int i = SelectedLetters.Count - 1; i >= currentIndex; i--)
+                {
+                    var toDeselect = SelectedLetters[i];
 
-                // Update lists
-                SelectableLetters.Add(toDeselect);
-                SelectedLetters.RemoveAt(i);
+                    // Move it back to selectable panel
+                    toDeselect.Tile.transform.SetParent(selectablePanel, false);
+                    toDeselect.Tile.transform.SetSiblingIndex(toDeselect.originalIndex);
+
+                    // Update lists
+                    SelectableLetters.Add(toDeselect);
+                    SelectedLetters.RemoveAt(i);
+                }
+
+                // Reparent and reorder based on new sorted list
+                ReSortSelectableLetters();
             }
 
-            // Reparent and reorder based on new sorted list
-            ReSortSelectableLetters();
+            if (SelectedLetters.Count > 0 && wordValidator.IsValid(SelectedToString()))
+                submitButton.interactable = true;
+            else
+                submitButton.interactable = false;
         }
-
-        if (SelectedLetters.Count > 0 && wordValidator.IsValid(SelectedToString()))
-            submitButton.interactable = true;
-        else
-            submitButton.interactable = false;
     }
 
     public void HandleSubmit()
@@ -125,7 +129,7 @@ public class LetterController : MonoBehaviour
         ClearSelected();
         GenerateFreshLetters();
         submitButton.interactable = false;
-
+        ToggleEnabled();
         OnSubmit?.Invoke(score);
     }
 
@@ -175,7 +179,7 @@ public class LetterController : MonoBehaviour
 
     public void HandleScramble()
     {
-        if (SelectedLetters.Count == 0)
+        if (isEnabled && SelectedLetters.Count == 0)
         {
             Debug.Log("Scrambling");
             ClearSelectable();
@@ -210,6 +214,21 @@ public class LetterController : MonoBehaviour
         }
 
         return stringBuilder.ToString();
+    }
+
+    public void ToggleEnabled()
+    {
+        isEnabled = !isEnabled;
+        if (isEnabled)
+        {
+            Debug.Log("Enabling UI");
+            submitButton.interactable = true;
+        }
+        else
+        {
+            Debug.Log("Disabling UI");
+            submitButton.interactable = false;
+        }
     }
 
     private class ManagedLetter

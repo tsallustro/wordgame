@@ -32,7 +32,6 @@ public class WordValidator : MonoBehaviour
     {
         bool value =
             !string.IsNullOrEmpty(word) && validWords != null && validWords.Contains(word.Trim());
-        Debug.Log($"Word {word} is valid? {value}");
         return value;
     }
 }
